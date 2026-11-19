@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Cloud Experience</title>
+
+  <!-- Polices (besoin d'internet la première fois) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!--
+    STRUCTURE DE LA PAGE
+    - Chaque écran du jeu est une <section class="screen" id="screen-...">.
+    - Un seul écran est visible à la fois : celui qui a la classe "active"
+      (c'est script.js qui change la classe avec la fonction showScreen).
+    - Les classes "player-name", "timer", "attempts" et "leaderboard"
+      sont remplies automatiquement par script.js.
+  -->
+
+  <!-- =====================================================
+       ÉCRAN 1 : ACCUEIL (le visiteur tape son nom)
+       ===================================================== -->
+  <section class="screen active" id="screen-welcome">
+    <div class="welcome-grid">
+      <div class="welcome-left">
+        <h1 class="welcome-title">Welcome to<br>the <span class="red rgb flicker">Cloud</span><br>Experience</h1>
+
+        <form id="name-form" class="name-form">
+          <label for="name-input">Please enter your name and press start</label>
+          <div class="name-row">
+            <input id="name-input" type="text" maxlength="12" placeholder="YOUR NAME_" autocomplete="off">
+            <button type="submit">Start</button>
+          </div>
+        </form>
+      </div>
+
+      <aside class="board">
+        <h2 class="board-title">Leaderboard</h2>
+        <ol class="leaderboard"></ol>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       ÉCRAN 2 : INSTRUCTIONS
+       ===================================================== -->
+  <section class="screen" id="screen-instructions">
+    <div class="center-left">
+      <h1 class="instructions-title">
+        Look closely and press the button on the cards you believe were created by
+        <span class="red rgb">humans</span>.
+      </h1>
+      <div class="attempts-line">
+        <div class="boxes">
+          <span class="box-outline"></span><span class="box-outline"></span><span class="box-outline"></span>
+        </div>
+        <p>You only have <span class="red">3 attempts</span></p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       ÉCRAN 3 : ROUND 1 EN COURS (timer qui défile)
+       ===================================================== -->
+  <section class="screen" id="screen-round1">
+    <div class="game">
+      <div class="game-top">
+        <div class="stat">
+          <span class="label">Round</span>
+          <span class="stat-big red">01</span>
+        </div>
+        <div class="stat right">
+          <span class="label">Player</span>
+          <span class="stat-big player-name"></span>
+        </div>
+      </div>
+
+      <div class="timer big-timer rgb">00:00<span class="cs">.00</span></div>
+
+      <div class="attempts-line small">
+        <span class="label">Attempts</span>
+        <div class="boxes attempts"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       ÉCRAN 4a : TRY AGAIN (revient tout seul au Round 1)
+       ===================================================== -->
+  <section class="screen screen-darkred" id="screen-tryagain">
+    <div class="center">
+      <p class="not-quite">Not quite.</p>
+      <h1 class="tryagain-title glitch">Try again</h1>
+      <div class="boxes attempts"><span></span><span></span><span></span></div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       ÉCRAN 4b : NO MORE ATTEMPTS (échec)
+       ===================================================== -->
+  <section class="screen screen-red" id="screen-fail">
+    <div class="center">
+      <div class="boxes">
+        <span class="box-x">✕</span><span class="box-x">✕</span><span class="box-x">✕</span>
+      </div>
+      <h1 class="fail-title glitch">No more<br>attempts</h1>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       ÉCRAN 4c : WELL DONE (succès + leaderboard)
+       ===================================================== -->
+  <section class="screen screen-green" id="screen-success">
+    <div class="success-grid">
+      <div class="success-left">
+        <h1 class="success-title">Well<br>done!</h1>
+        <div class="your-time">
+          <span class="label green-muted">Your time</span>
+          <span id="final-time">00:00.00</span>
+        </div>
+      </div>
+
+      <aside class="board board-green">
+        <h2 class="board-title">Leaderboard</h2>
+        <ol class="leaderboard"></ol>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       ÉCRAN 5 : ANNONCE ROUND 2 (2 messages qui alternent)
+       ===================================================== -->
+  <section class="screen" id="screen-announce">
+    <h1 class="announce-a announce-title rgb">Round 2 is<br>about to start</h1>
+    <h1 class="announce-b announce-title-b glitch">This time,<br>it's going to be<br>even harder.</h1>
+  </section>
+
+
+  <!-- =====================================================
+       ÉCRAN 6 : ROUND 2 EN COURS
+       ===================================================== -->
+  <section class="screen screen-round2" id="screen-round2">
+    <div class="game">
+      <div class="game-top">
+        <div class="stat">
+          <span class="label">Round</span>
+          <span class="stat-big red jitter">02</span>
+        </div>
+        <div class="stat right">
+          <span class="label">Player</span>
+          <span class="stat-big player-name"></span>
+        </div>
+      </div>
+
+      <div class="timer big-timer timer-red jitter">00:00<span class="cs">.00</span></div>
+
+      <div></div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       NOIR COMPLET (1,5 s avant "Wrong.")
+       ===================================================== -->
+  <section class="screen screen-black" id="screen-blackout"></section>
+
+
+  <!-- =====================================================
+       ÉCRANS DE FIN : une phrase par écran (ESPACE pour avancer)
+       ===================================================== -->
+  <section class="screen screen-black" id="screen-wrong">
+    <div class="center">
+      <h1 class="wrong-title glitch-slow">Wrong.</h1>
+    </div>
+  </section>
+
+  <section class="screen screen-black" id="screen-end1">
+    <div class="center">
+      <h1 class="end-text">Actually, there was <span class="red rgb">no right answer.</span></h1>
+    </div>
+  </section>
+
+  <section class="screen screen-black" id="screen-end2">
+    <div class="center">
+      <h1 class="end-text">Every single creation left in this room was made by <span class="red rgb">artificial intelligence.</span></h1>
+    </div>
+  </section>
+
+  <section class="screen screen-black" id="screen-end3">
+    <div class="center">
+      <h1 class="end-text">And as more content floods the internet, finding the right information becomes <span class="red rgb">harder.</span></h1>
+    </div>
+  </section>
+
+  <section class="screen screen-black" id="screen-end4">
+    <div class="center">
+      <h1 class="end-text flicker">Human creativity is <span class="red rgb">being replaced.</span></h1>
+    </div>
+  </section>
+
+  <section class="screen screen-black" id="screen-end5">
+    <div class="center">
+      <h1 class="end-text">How much of this is worth your <span class="red rgb">attention?</span></h1>
+    </div>
+  </section>
+
+  <section class="screen screen-black" id="screen-end6">
+    <div class="center">
+      <p class="thanks">Thank you for your participation.</p>
+      <p class="leave blink">Please leave the room →</p>
+    </div>
+  </section>
+
+
+  <!-- Effets "vieil écran" par-dessus tout -->
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+
+
+  <!-- =====================================================
+       AIDE OPÉRATEUR (touche H pour afficher / cacher)
+       ===================================================== -->
+  <div id="help">
+    <h3>Operator keys</h3>
+    <p><b>ESPACE</b> écran suivant</p>
+    <p><b>T</b> mauvaise carte (Try again)</p>
+    <p><b>S</b> bonne carte (Succès)</p>
+    <p><b>F</b> échec direct (No more attempts)</p>
+    <p><b>ÉCHAP</b> retour à l'accueil</p>
+    <p><b>H</b> cacher cette aide</p>
+    <p><b>CTRL + SHIFT + X</b> (2 fois) vider le leaderboard</p>
+    <p class="help-screen">Écran actuel : <span id="help-current"></span></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
